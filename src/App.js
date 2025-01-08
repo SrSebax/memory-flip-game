@@ -1,6 +1,5 @@
 import React from "react";
-import "./App.css";
-import MemoryFlip from "./components/MemoryFlip";
+import MemoryFlip from "./MemoryFlip";
 
 function App() {
   return (
