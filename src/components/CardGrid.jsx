@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import "../styles/game.css";
+import { Box, Typography } from "@mui/material";
 
 function CardGrid({ setMatchedPairs, emojis }) {
   const [cards, setCards] = useState([]);
@@ -55,24 +55,85 @@ function CardGrid({ setMatchedPairs, emojis }) {
   }, [flippedIndices, cards, setMatchedPairs]);
 
   return (
-    <div className="cards">
+    <Box
+      sx={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: 2,
+        padding: 2,
+        '@media (max-width: 600px)': {
+          gridTemplateColumns: 'repeat(4, 1fr)', // Mantener 4x4 en pantallas pequeñas
+        },
+      }}
+    >
       {cards.map((card, index) => (
-        <motion.div
+        <Box
           key={card.id}
-          className={`card ${card.flipped || card.matched ? 'flipped' : ''}`}
+          sx={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: card.flipped || card.matched ? '#d4edda' : '#f5f5f5',
+            borderRadius: '16px',
+            cursor: 'pointer',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            '&:hover': {
+              transform: 'scale(1.05)',
+              boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.2)',
+            },
+            boxShadow: card.flipped || card.matched ? '0px 0px 20px rgba(0, 0, 0, 0.3)' : '0px 4px 6px rgba(0, 0, 0, 0.1)',
+          }}
           onClick={() => handleCardClick(index)}
-          initial={{ rotateY: 0 }}
-          animate={{ rotateY: card.flipped ? 180 : 0 }}
-          transition={{ duration: 0.5 }}
         >
-          {card.flipped || card.matched ? (
-            <span className="emoji">{card.emoji}</span>
-          ) : (
-            <div className="back">?</div>
-          )}
-        </motion.div>
+          <motion.div
+            className={`card ${card.flipped || card.matched ? 'flipped' : ''}`}
+            initial={{ rotateY: 0 }}
+            animate={{ rotateY: card.flipped ? 180 : 0 }}
+            transition={{ duration: 0.5 }}
+            style={{
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {card.flipped || card.matched ? (
+              <Typography
+                variant="h4"
+                sx={{
+                  fontSize: '2.5rem',
+                  color: '#4CAF50',
+                  transition: 'opacity 0.3s ease',
+                  opacity: card.matched ? 0.7 : 1,
+                }}
+              >
+                {card.emoji}
+              </Typography>
+            ) : (
+              <div
+                className="back"
+                style={{
+                  fontSize: '2.5rem',
+                  color: '#888',
+                  borderRadius: '16px',
+                  padding: '20px',
+                  textAlign: 'center',
+                  opacity: 0.9,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                ?
+              </div>
+            )}
+          </motion.div>
+        </Box>
       ))}
-    </div>
+    </Box>
   );
 }
 
